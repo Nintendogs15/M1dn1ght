@@ -1,16 +1,13 @@
-# Binaries for programs and plugins
+# Binaries
 *.exe
-*.exe~
 *.dll
 *.so
-*.so.*
 *.dylib
 
-# Build output
-M1dn1ght
-M1dn1ght-*
+# Build outputs
 dist/
 build/
+out/
 
 # IDE
 .vscode/
@@ -20,6 +17,13 @@ build/
 *~
 .DS_Store
 
-# Go
-go.sum
+# Dependencies
+node_modules/
 vendor/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log

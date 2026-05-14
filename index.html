@@ -3,195 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M1dn1ght - ChromeOS Manager</title>
+    <title>M1dn1ght - Chromebook Unenrollment Tool</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="header-content">
-                <h1>╔════════════════════════════════════════╗<br>║      M1dn1ght - ChromeOS Manager       ║<br>╚════════════════════════════════════════╝</h1>
-                <p class="subtitle">Web-based ChromeOS Extension Manager & Unenrollment Tool</p>
+        <div class="header">
+            <h1>M1dn1ght</h1>
+            <p class="subtitle">Chromebook Enterprise Enrollment Removal</p>
+        </div>
+
+        <div class="status-panel">
+            <h2>Device Status</h2>
+            <div id="enrollmentStatus" class="status-box">
+                <p>Checking enrollment status...</p>
             </div>
-        </header>
+        </div>
 
-        <main>
-            <nav class="sidebar">
-                <h2>Menu</h2>
-                <div class="nav-buttons">
-                    <button class="nav-btn" data-section="extensions" onclick="switchSection('extensions')">
-                        📦 Extension Management
-                    </button>
-                    <button class="nav-btn" data-section="unenroll" onclick="switchSection('unenroll')">
-                        🔐 Force Unenroll
-                    </button>
-                    <button class="nav-btn" data-section="help" onclick="switchSection('help')">
-                        ❓ Help & Info
-                    </button>
-                </div>
-            </nav>
+        <div class="controls-panel">
+            <h2>Unenrollment Tools</h2>
+            
+            <div class="control-group">
+                <button id="checkStatusBtn" class="btn btn-primary">Check Status</button>
+                <p class="info-text">Verify current enrollment status</p>
+            </div>
 
-            <section id="content">
-                <!-- Extension Management Section -->
-                <div id="extensions" class="section active">
-                    <h2>📦 Chrome Extension Management</h2>
-                    <p class="section-info">Manage your installed Chrome extensions</p>
+            <div class="control-group">
+                <button id="unenrollBtn" class="btn btn-warning">Unenroll Device</button>
+                <p class="info-text">Remove enterprise enrollment from this Chromebook</p>
+            </div>
 
-                    <div class="section-content">
-                        <div class="action-buttons">
-                            <button id="listBtn" class="btn btn-primary" onclick="listExtensions()">
-                                📋 List All Extensions
-                            </button>
-                        </div>
+            <div class="control-group">
+                <button id="factoryResetBtn" class="btn btn-danger">Factory Reset</button>
+                <p class="info-text">Reset Chromebook to factory defaults (WARNING: This will erase all data)</p>
+            </div>
+        </div>
 
-                        <div id="extensionsList" class="extensions-list hidden">
-                            <h3>Installed Extensions</h3>
-                            <div id="extensionsContent"></div>
-                        </div>
+        <div class="info-panel">
+            <h2>Information</h2>
+            <div id="infoBox" class="info-box">
+                <p>Welcome to M1dn1ght. This tool helps you remove enterprise enrollment from your Chromebook.</p>
+                <p><strong>Important:</strong> Only use this tool on devices you own or have permission to manage.</p>
+            </div>
+        </div>
 
-                        <div class="divider"></div>
-
-                        <h3>Uninstall Extensions</h3>
-                        
-                        <div class="form-group">
-                            <label for="singleExtId">Single Extension ID:</label>
-                            <input type="text" id="singleExtId" placeholder="Enter extension ID (e.g., bmnlcjabgnpnenekpadlanbbkooimhnj)">
-                            <button class="btn btn-danger" onclick="uninstallSingle()">
-                                🗑️ Uninstall Single Extension
-                            </button>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="multipleExtIds">Multiple Extension IDs (comma-separated):</label>
-                            <textarea id="multipleExtIds" placeholder="Enter extension IDs separated by commas&#10;Example: id1,id2,id3"></textarea>
-                            <button class="btn btn-danger" onclick="uninstallMultiple()">
-                                🗑️ Uninstall Multiple Extensions
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Force Unenroll Section -->
-                <div id="unenroll" class="section">
-                    <h2>🔐 Force Unenroll from Enterprise Management</h2>
-                    <p class="section-info">⚠️ CRITICAL OPERATION - Proceed with caution</p>
-
-                    <div class="section-content">
-                        <div class="warning-box">
-                            <h3>⚠️ WARNING - Please Read Carefully</h3>
-                            <p>This action will:</p>
-                            <ul>
-                                <li>Remove enterprise management from your Chromebook</li>
-                                <li>Delete device enrollment certificates</li>
-                                <li>Remove all enterprise policies and restrictions</li>
-                                <li>Clear management server configurations</li>
-                                <li>Reboot your device</li>
-                            </ul>
-                            <p><strong>This action cannot be undone without re-enrollment</strong></p>
-                        </div>
-
-                        <div class="danger-box">
-                            <h3>❌ IMPORTANT REQUIREMENTS</h3>
-                            <ul>
-                                <li>You must have <strong>Owner account</strong> access</li>
-                                <li><strong>Save all work</strong> before proceeding</li>
-                                <li>Device will automatically <strong>reboot</strong> when complete</li>
-                                <li>Only run this on <strong>your own device</strong></li>
-                            </ul>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="unenrollConfirm">
-                                Type "<strong>FORCE UNENROLL</strong>" to confirm (case-sensitive):
-                            </label>
-                            <input type="text" id="unenrollConfirm" placeholder="Type: FORCE UNENROLL" autocomplete="off">
-                            <button class="btn btn-critical" onclick="forceUnenroll()">
-                                🔄 Proceed with Unenrollment
-                            </button>
-                        </div>
-
-                        <div class="info-box">
-                            <h3>📋 The unenrollment process will:</h3>
-                            <ol>
-                                <li>Stop device management services</li>
-                                <li>Remove enterprise policies</li>
-                                <li>Delete enrollment certificates</li>
-                                <li>Clear device state and tokens</li>
-                                <li>Reset Chrome sync and sign-in state</li>
-                                <li>Remove TPM enterprise data</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Help Section -->
-                <div id="help" class="section">
-                    <h2>❓ Help & Information</h2>
-                    
-                    <div class="section-content">
-                        <h3>About M1dn1ght</h3>
-                        <p>M1dn1ght is a web-based tool for managing ChromeOS systems. It allows you to uninstall Chrome extensions and force unenroll enterprise-managed Chromebooks from your organization's management servers.</p>
-
-                        <h3>🔍 How to Find Your Extension ID</h3>
-                        <ol>
-                            <li>Open <strong>Chrome</strong> on your Chromebook</li>
-                            <li>Go to <code>chrome://extensions/</code></li>
-                            <li>Enable <strong>Developer mode</strong> (toggle in top right)</li>
-                            <li>Find your extension in the list</li>
-                            <li>Copy the <strong>ID</strong> displayed below the extension name</li>
-                        </ol>
-
-                        <h3>💾 System Paths Affected by Unenrollment</h3>
-                        <ul>
-                            <li><code>/etc/opt/google/chrome/policies/</code> - Enterprise policies</li>
-                            <li><code>/var/lib/whitelist/</code> - Whitelist configurations</li>
-                            <li><code>/var/lib/devicesettings/</code> - Device settings</li>
-                            <li><code>/var/lib/dbus/</code> - Device state</li>
-                            <li><code>/var/lib/tpm/</code> - TPM enterprise data</li>
-                        </ul>
-
-                        <h3>⚠️ Important Notes</h3>
-                        <ul>
-                            <li><strong>Personal Use Only:</strong> Only run on your own Chromebook with explicit permission</li>
-                            <li><strong>Irreversible:</strong> Cannot be undone without re-enrollment through IT administrator</li>
-                            <li><strong>Data Loss Risk:</strong> Some data may be lost during unenrollment</li>
-                            <li><strong>Legal Consequences:</strong> Unauthorized unenrollment may violate employment agreements</li>
-                        </ul>
-
-                        <h3>✅ After Unenrollment</h3>
-                        <ul>
-                            <li>Device will reboot automatically</li>
-                            <li>You'll have full control over your Chromebook</li>
-                            <li>Enterprise monitoring will cease</li>
-                            <li>You can install any extensions or applications</li>
-                        </ul>
-
-                        <h3>🔧 Troubleshooting</h3>
-                        <ul>
-                            <li><strong>Extension Not Found:</strong> Verify the extension ID is correct</li>
-                            <li><strong>Permission Denied:</strong> Ensure you have owner account access</li>
-                            <li><strong>Unenrollment Failed:</strong> Check that Linux container has proper permissions</li>
-                            <li><strong>Device Won't Boot:</strong> Force shutdown and restart, or use Recovery Mode (Ctrl+Alt+Shift+R)</li>
-                        </ul>
-
-                        <h3>📞 Need Help?</h3>
-                        <ul>
-                            <li>Check the <a href="https://github.com/Nintendogs15/M1dn1ght" target="_blank">GitHub repository</a></li>
-                            <li>Open an <a href="https://github.com/Nintendogs15/M1dn1ght/issues" target="_blank">issue</a> for support</li>
-                            <li>Read the <a href="https://github.com/Nintendogs15/M1dn1ght/blob/main/README.md" target="_blank">full documentation</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>M1dn1ght © 2026 | MIT License | <a href="https://github.com/Nintendogs15/M1dn1ght" target="_blank">GitHub</a></p>
-        </footer>
+        <div class="footer">
+            <p>M1dn1ght © 2026 | MIT License</p>
+        </div>
     </div>
-
-    <!-- Toast Notifications -->
-    <div id="toast" class="toast"></div>
 
     <script src="script.js"></script>
 </body>
